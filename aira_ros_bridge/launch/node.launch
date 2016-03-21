@@ -1,11 +1,11 @@
 <launch>
     <!-- ROSCombatible inherit contract address -->
-    <arg name="contract_address" value=""/>
+    <arg name="contract_address"/>
     <!-- Ethereum node RPC port -->
-    <arg name="rpc_port" value="8545"/>
+    <arg name="rpc_port"/>
     <!-- ROS Bridge Suite web-socket port -->
-    <arg name="bridge_port" value="9090"/>
+    <arg name="bridge_port"/>
 
-    <node name="aira_node" pkg="aira_ros_bridge" type="start.sh"
+    <node name="aira_node_$(arg contract_address)" pkg="aira_ros_bridge" type="start.sh"
           args="$(arg contract_address) $(arg rpc_port) $(arg bridge_port)"/>
 </launch>
