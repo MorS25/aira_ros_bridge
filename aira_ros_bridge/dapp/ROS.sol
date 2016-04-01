@@ -33,20 +33,24 @@ contract Topic {
  * The subscriber contract.
  * Implements message subscribing action,
  * gives message transactions and runs the Runnable callback.
- * TODO: Security questions.
  ***/
 contract Subscriber is Topic {
     /*** Private members ***/
     MessageHandler callback;
+    // The connection endpoint, e.g. AIRA ROS Bridge account address
+    address endpoint;
     /*** Service events & functions ***/
-    function SubMessage(Message _msg) public {
-        callback.incomingMessage(_msg);
+    function SubMessage(Message _msg) {
+        if (msg.sender == endpoint)
+            callback.incomingMessage(_msg);
     }
     /*** Public constructor ***/
     function Subscriber(string _name,
                         string _type,
-                        MessageHandler _callback) Topic(_name, _type) {
+                        MessageHandler _callback,
+                        address _endpoint) Topic(_name, _type) {
         callback = _callback;
+        endpoint = _endpoint;
     }
 }
 
@@ -59,8 +63,8 @@ contract Publisher is Topic {
     /*** Service events & functions ***/
     event PubMessage(address msg);
     /*** Public constructor ***/
-    function Publisher(string _name, string _type) Topic(_name, _type) {
-    }
+    function Publisher(string _name, string _type) Topic(_name, _type)
+    {}
     /*** Public methods ***/
     // Publish new message
     function publish(Message _msg) {
@@ -78,17 +82,21 @@ contract ROSCompatible {
     Publisher[]  public publishers;
     // List of all contract subscribers
     Subscriber[] public subscribers;
+    // Endpoint address, e.g. AIRA ROS Bridge account address
+    address endpoint;
+    /*** ROS Compatible constructor ***/
+    function ROSCompatible(address _endpoint) { endpoint = _endpoint; }
     /*** Public methods ***/
     // Create a new Subscriber instance
-    function mkSubscriber (string _name,
-                            string _type,
-                            MessageHandler _callback) returns (Subscriber) {
-        var subscriber = new Subscriber(_name, _type, _callback);
+    function mkSubscriber(string _name,
+                          string _type,
+                          MessageHandler _callback) returns (Subscriber) {
+        var subscriber = new Subscriber(_name, _type, _callback, endpoint);
         subscribers[subscribers.length++] = subscriber;
         return subscriber;
     }
     // Create a new Publisher instance
-    function mkPublisher (string _name, string _type) returns (Publisher) {
+    function mkPublisher(string _name, string _type) returns (Publisher) {
         var publisher = new Publisher(_name, _type);
         publishers[publishers.length++] = publisher;
         return publisher;
