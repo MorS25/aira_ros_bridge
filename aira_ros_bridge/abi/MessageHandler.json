@@ -1,0 +1,1 @@
+[{"constant":false,"inputs":[{"name":"msg","type":"address"}],"name":"incomingMessage","outputs":[],"payable":false,"type":"function"}]

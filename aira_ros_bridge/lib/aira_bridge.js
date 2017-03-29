@@ -38,7 +38,7 @@ function bridge(contract_address, rpc_port, bridge_port) {
     ros.on('connection', function() {console.log('Connected to websocket server.')});
 
     /* Load publishers */
-    var ros_contract = web3.eth.contract(ABI.ros_compatible).at(contract_address);
+    var ros_contract = web3.eth.contract(ABI.ros_bridge).at(contract_address);
 
     console.log("Contract: " + contract_address);
     console.log("Publishers:");
