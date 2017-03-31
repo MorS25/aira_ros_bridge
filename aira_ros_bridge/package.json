@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/aira-dao/aira-IoT#readme",
   "dependencies": {
-    "web3": "0.15.1",
+    "web3": "",
     "roslib": "0.17.0" 
   }
 }
